@@ -5,6 +5,7 @@ import (
     "net/http"
     "net/http/httptest"
     "testing"
+	"fmt"
 )
 
 func TestHealthEndpoint(t *testing.T) {
@@ -21,7 +22,9 @@ func TestHealthEndpoint(t *testing.T) {
         }
         w.Header().Set("Content-Type", "application/json")
         w.WriteHeader(http.StatusOK)
-        json.NewEncoder(w).Encode(response)
+		if err := json.NewEncoder(w).Encode(response); err != nil {
+			fmt.Printf("got an error");
+		}
     })
 
     handler.ServeHTTP(rr, req)
