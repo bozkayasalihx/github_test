@@ -1,10 +1,11 @@
 package main
 
 import (
-    "encoding/json"
-    "log"
-    "net/http"
-    "os"
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
 )
 
 type Response struct {
@@ -24,7 +25,9 @@ func main() {
             Status:  "success",
         }
         w.Header().Set("Content-Type", "application/json")
-        json.NewEncoder(w).Encode(response)
+        if err := json.NewEncoder(w).Encode(response); err != nil {
+			fmt.Printf("got an error");
+		}
     })
 
     http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
@@ -34,7 +37,9 @@ func main() {
         }
         w.Header().Set("Content-Type", "application/json")
         w.WriteHeader(http.StatusOK)
-        json.NewEncoder(w).Encode(response)
+        if err := json.NewEncoder(w).Encode(response); err != nil {
+			fmt.Printf("got new error");
+		}
     })
 
     log.Printf("Server starting on port %s...", port)
